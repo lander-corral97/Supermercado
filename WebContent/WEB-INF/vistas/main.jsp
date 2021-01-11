@@ -12,7 +12,7 @@
 							class="badge badge-pill badge-danger position-absolute px-3 py-1 m-2">${ prod.discount }%</p>
 					</c:if>
 					<img class="card-img-top" src="${ prod.imageUrl }"
-						alt="Card image cap">
+						alt="${ prod.name }">
 					<div class="card-body">
 						<h5 class="card-title">${ prod.name }</h5>
 						<p class="card-text">${ prod.description }</p>

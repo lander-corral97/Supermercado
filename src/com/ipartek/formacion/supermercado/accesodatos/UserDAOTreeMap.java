@@ -4,7 +4,7 @@ import java.util.TreeMap;
 
 import com.ipartek.formacion.supermercado.modelo.User;
 
-public class UserDAOTreeMap implements Dao<User> {
+public class UserDAOTreeMap implements DaoUser {
 
 	private static TreeMap<Long, User> users = new TreeMap<>();
 
@@ -50,6 +50,7 @@ public class UserDAOTreeMap implements Dao<User> {
 		users.remove(id);
 	}
 
+	@Override
 	public User getByEmail(String email) {
 		for (User user : users.values()) {
 			if (email.equals(user.getEmail())) {

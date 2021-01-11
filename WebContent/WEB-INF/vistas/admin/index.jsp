@@ -32,8 +32,8 @@
 					<td><fmt:formatNumber type="percent" value="${ prod.discount / 100 }"/></td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <a class="btn btn-primary btn-sm" href="editarCliente.html">Editar</a>
-                            <a class="btn btn-danger btn-sm" href="#">Borrar</a>
+                            <a class="btn btn-primary btn-sm" href="admin/producto?id=${ prod.id }">Editar</a>
+                            <a onclick="return confirm('¿Estás seguro?')" class="btn btn-danger btn-sm" href="admin/borrar?id=${ prod.id }">Borrar</a>
                         </div>
                     </td>
 				</tr>

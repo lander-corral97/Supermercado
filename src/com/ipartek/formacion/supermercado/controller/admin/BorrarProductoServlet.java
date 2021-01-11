@@ -1,4 +1,4 @@
-package com.ipartek.formacion.supermercado.controller;
+package com.ipartek.formacion.supermercado.controller.admin;
 
 import java.io.IOException;
 
@@ -9,19 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.supermercado.accesodatos.Dao;
+import com.ipartek.formacion.supermercado.controller.Configuracion;
 import com.ipartek.formacion.supermercado.modelo.Product;
 
-@WebServlet("/principal")
-public class MainServlet extends HttpServlet {
+@WebServlet("/admin/borrar")
+public class BorrarProductoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Dao<Product> dao = Configuracion.daoProduct;
-		Iterable<Product> products = dao.getAll();
+		String id = request.getParameter("id");
 
-		request.setAttribute("products", products);
-		request.getRequestDispatcher("/WEB-INF/vistas/main.jsp").forward(request, response);
+		Dao<Product> dao = Configuracion.daoProduct;
+		dao.delete(Long.parseLong(id));
+
+		request.getRequestDispatcher("/admin/index").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

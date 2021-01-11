@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.formacion.supermercado.accesodatos.UserDAOTreeMap;
+import com.ipartek.formacion.supermercado.accesodatos.DaoUser;
 import com.ipartek.formacion.supermercado.modelo.User;
 
 @WebServlet("/login")
@@ -25,12 +25,16 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		UserDAOTreeMap dao = UserDAOTreeMap.getInstance();
-		User user = dao.getByEmail(email);
-		if (user != null && user.getPassword().equals(password)) {
-			request.getSession().setAttribute("usuario", user);
+		DaoUser dao = Configuracion.daoUser;
+		User usuario = dao.getByEmail(email);
+
+		if (usuario != null && usuario.getPassword().equals(password)) {
+			request.getSession().setAttribute("usuario", usuario);
 			response.sendRedirect(request.getContextPath() + "/admin/index");
 		} else {
+			request.setAttribute("alertaTexto", "El usuario o la contraseña son incorrectos");
+			request.setAttribute("alertaNivel", "danger");
+
 			request.getRequestDispatcher("/WEB-INF/vistas/login.jsp").forward(request, response);
 		}
 	}
