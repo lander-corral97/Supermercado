@@ -12,6 +12,20 @@
 	</div>
 	
 	<div class="form-group row">
+		<label for="departamento" class="col-sm-2 col-form-label">Departamento</label>
+		<div class="col-sm-10">
+			<select class="form-control ${ producto.errorDepartment != null ? 'is-invalid' : ''}" id="departamento" name="departamento">
+				<option value="0">Introduzca el departamento</option>
+				<c:forEach items="${ departamentos }" var="departamento">
+					<option value="${ departamento.id }" ${ departamento.id == producto.department.id ? 'selected' : '' }>${ departamento.name }</option>
+				</c:forEach>	
+			</select>
+		</div>
+		<div class="valid-feedback">Departamento Correcto</div>
+		<div class="invalid-feedback">${ producto.errorDepartment }</div>
+	</div>
+	
+	<div class="form-group row">
 		<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
 		<div class="col-sm-10">
 			<input type="text" class="form-control" id="nombre" name="nombre" required
@@ -25,14 +39,16 @@
 		<label for="imagen" class="col-sm-2 col-form-label">Imagen</label>
 		<div class="col-sm-10">
 			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="imagen" lang="es" name="imagen">
+				<input type="file" class="custom-file-input" id="imagen" lang="es" name="imagen" value="${ producto.imageUrl }">
 				<label class="custom-file-label" for="imagen" data-browse="Elegir">${ producto.imageUrl != null ? producto.imageUrl : 'Seleccionar Archivo'}</label>
-					
+				<button class="btn btn-danger" type="button" onclick="$('.custom-file [for=imagen]').text('');$('[name=imagenAnterior]').val('')">Borrar Imagen</button>
+			</div>
 			<div class="valid-feedback">Imagen Correcta</div>
 			<div class="invalid-feedback"></div>
-			</div>
 		</div>
 	</div>
+	
+	<input type="hidden" name="imagenAnterior" value="${ producto.imageUrl }" />
 	
 	<div class="form-group row">
 		<label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>

@@ -15,6 +15,7 @@ public class Product implements Serializable {
 	private String unitMeasuring;
 	private BigDecimal unitPerMeasuring;
 	private Integer quantity;
+	private Department department;
 
 	private boolean correcto = true;
 
@@ -27,6 +28,7 @@ public class Product implements Serializable {
 	private String errorUnitMeasuring;
 	private String errorUnitPerMeasuring;
 	private String errorQuantity;
+	private String errorDepartment;
 
 	public Product(String id, String name, String description, String imageUrl, String price, String discount,
 			String unitMeasuring, String unitPerMeasuring, String quantity) {
@@ -111,8 +113,8 @@ public class Product implements Serializable {
 	}
 
 	public void setName(String name) {
-		if (name == null || name.trim().length() < 3 || name.matches("[A-Z][a-z]*")) {
-			setErrorName("Debe introducir un nombre con sólo letras y mayúscula la primera. Mínimo 3 caracteres");
+		if (name == null || name.trim().length() < 3 || !name.matches("\\p{Lu}\\p{Ll}{2}[\\p{Ll} ]*")) {
+			setErrorName("Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres");
 		}
 		this.name = name;
 	}
@@ -138,7 +140,7 @@ public class Product implements Serializable {
 	}
 
 	public void setPrice(BigDecimal price) {
-		if (price == null || price.compareTo(new BigDecimal("10")) < 0) {
+		if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
 			setErrorPrice("Debe rellenarse y ser mayor que 0");
 		}
 		this.price = price;
@@ -284,6 +286,26 @@ public class Product implements Serializable {
 		this.errorQuantity = errorQuantity;
 	}
 
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		if (department == null || department.getId() == null || department.getId() == 0L) {
+			setErrorDepartment("El departamento es obligatorio");
+		}
+		this.department = department;
+	}
+
+	public String getErrorDepartment() {
+		return errorDepartment;
+	}
+
+	public void setErrorDepartment(String errorDepartment) {
+		correcto = false;
+		this.errorDepartment = errorDepartment;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -361,7 +383,22 @@ public class Product implements Serializable {
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", imageUrl=" + imageUrl
 				+ ", price=" + price + ", discount=" + discount + ", unitMeasuring=" + unitMeasuring
-				+ ", unitPerMeasuring=" + unitPerMeasuring + ", quantity=" + quantity + "]";
+				+ ", unitPerMeasuring=" + unitPerMeasuring + ", quantity=" + quantity + ", department=" + department
+				+ ", correcto=" + correcto + ", errorId=" + errorId + ", errorName=" + errorName + ", errorDescription="
+				+ errorDescription + ", errorImageUrl=" + errorImageUrl + ", errorPrice=" + errorPrice
+				+ ", errorDiscount=" + errorDiscount + ", errorUnitMeasuring=" + errorUnitMeasuring
+				+ ", errorUnitPerMeasuring=" + errorUnitPerMeasuring + ", errorQuantity=" + errorQuantity
+				+ ", errorDepartment=" + errorDepartment + ", getId()=" + getId() + ", getName()=" + getName()
+				+ ", getDescription()=" + getDescription() + ", getImageUrl()=" + getImageUrl() + ", getPrice()="
+				+ getPrice() + ", getDiscount()=" + getDiscount() + ", getUnitMeasuring()=" + getUnitMeasuring()
+				+ ", getUnitPerMeasuring()=" + getUnitPerMeasuring() + ", getQuantity()=" + getQuantity()
+				+ ", getDiscountedPrice()=" + getDiscountedPrice() + ", isCorrecto()=" + isCorrecto()
+				+ ", getErrorId()=" + getErrorId() + ", getErrorName()=" + getErrorName() + ", getErrorDescription()="
+				+ getErrorDescription() + ", getErrorImageUrl()=" + getErrorImageUrl() + ", getErrorPrice()="
+				+ getErrorPrice() + ", getErrorDiscount()=" + getErrorDiscount() + ", getErrorUnitMeasuring()="
+				+ getErrorUnitMeasuring() + ", getErrorUnitPerMeasuring()=" + getErrorUnitPerMeasuring()
+				+ ", getErrorQuantity()=" + getErrorQuantity() + ", getDepartment()=" + getDepartment()
+				+ ", getErrorDepartment()=" + getErrorDepartment() + ", hashCode()=" + hashCode() + "]";
 	}
 
 }

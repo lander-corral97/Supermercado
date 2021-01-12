@@ -8,6 +8,7 @@
 			<tr>
 				<th scope="col">Id</th>
 				<th scope="col">Nombre</th>
+				<th scope="col">Departamento</th>
 				<th scope="col">Imagen</th>
 				<th scope="col">Descripción</th>
 				<th scope="col">Precio</th>
@@ -23,6 +24,7 @@
 				<tr>
 					<th scope="row">${ prod.id }</th>
 					<td>${ prod.name }</td>
+					<td>${ prod.department.name }</td>
 					<td><img src="${ prod.imageUrl }" style="height: 3em"/></td>
 					<td>${ prod.description }</td>
 					<td><fmt:formatNumber type="currency" value="${ prod.price }"/></td>

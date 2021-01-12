@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.supermercado.exception.AccesoDatosException;
+import com.ipartek.formacion.supermercado.modelo.Department;
 import com.ipartek.formacion.supermercado.modelo.Product;
 
 public class ProductDAOMySql implements Dao<Product> {
@@ -17,10 +18,10 @@ public class ProductDAOMySql implements Dao<Product> {
 	private final String USER = "root";
 	private final String PASS = "";
 
-	private static final String SQL_SELECT = "Select * From productos";
-	private static final String SQL_SELECT_ID = "Select * From productos Where Id=?";
-	private static final String SQL_INSERT = "Insert Into productos (nombre,descripcion,url_imagen,precio,descuento,unidad_medida,precio_unidad_medida,cantidad) Values (?,?,?,?,?,?,?,?)";
-	private static final String SQL_UPDATE = "Update productos SET nombre=?, descripcion=?,url_imagen=?,precio=?,descuento=?,unidad_medida=?,precio_unidad_medida=?,cantidad=? Where id=?";
+	private static final String SQL_SELECT = "Select * From productos p Join departamento d On p.departamento_id = d.id";
+	private static final String SQL_SELECT_ID = "Select * From productos p Join departamento d On p.departamento_id = d.id Where p.Id=?";
+	private static final String SQL_INSERT = "Insert Into productos (nombre,descripcion,url_imagen,precio,descuento,unidad_medida,precio_unidad_medida,cantidad,departamento_id) Values (?,?,?,?,?,?,?,?,?)";
+	private static final String SQL_UPDATE = "Update productos SET nombre=?, descripcion=?,url_imagen=?,precio=?,descuento=?,unidad_medida=?,precio_unidad_medida=?,cantidad=?,departamento_id=? Where id=?";
 	private static final String SQL_DELETE = "Delete From productos Where id = ?";
 
 	static {
@@ -49,10 +50,16 @@ public class ProductDAOMySql implements Dao<Product> {
 				ResultSet rs = s.executeQuery(SQL_SELECT)) {
 			ArrayList<Product> products = new ArrayList<>();
 			Product p;
+			Department d;
 			while (rs.next()) {
-				p = new Product(rs.getLong("id"), rs.getString("nombre"), rs.getString("descripcion"),
-						rs.getString("url_imagen"), rs.getBigDecimal("precio"), rs.getInt("descuento"),
-						rs.getString("unidad_medida"), rs.getBigDecimal("precio_unidad_medida"), rs.getInt("cantidad"));
+				p = new Product(rs.getLong("p.id"), rs.getString("nombre"), rs.getString("p.descripcion"),
+						rs.getString("p.url_imagen"), rs.getBigDecimal("p.precio"), rs.getInt("p.descuento"),
+						rs.getString("p.unidad_medida"), rs.getBigDecimal("p.precio_unidad_medida"),
+						rs.getInt("p.cantidad"));
+
+				d = new Department(rs.getLong("d.id"), rs.getString("d.nombre"), rs.getString("d.descripcion"));
+
+				p.setDepartment(d);
 
 				products.add(p);
 			}
@@ -71,13 +78,16 @@ public class ProductDAOMySql implements Dao<Product> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				Product p = null;
-
+				Department d = null;
 				if (rs.next()) {
-					p = new Product(rs.getLong("id"), rs.getString("nombre"), rs.getString("descuento"),
-							rs.getString("url_imagen"), rs.getBigDecimal("precio"), rs.getInt("descuento"),
-							rs.getString("unidad_medida"), rs.getBigDecimal("precio_unidad_medida"),
-							rs.getInt("cantidad"));
+					p = new Product(rs.getLong("p.id"), rs.getString("p.nombre"), rs.getString("p.descripcion"),
+							rs.getString("p.url_imagen"), rs.getBigDecimal("p.precio"), rs.getInt("p.descuento"),
+							rs.getString("p.unidad_medida"), rs.getBigDecimal("p.precio_unidad_medida"),
+							rs.getInt("p.cantidad"));
 
+					d = new Department(rs.getLong("d.id"), rs.getString("d.nombre"), rs.getString("d.descripcion"));
+
+					p.setDepartment(d);
 				}
 
 				return p;
@@ -100,6 +110,7 @@ public class ProductDAOMySql implements Dao<Product> {
 			ps.setString(6, product.getUnitMeasuring());
 			ps.setBigDecimal(7, product.getUnitPerMeasuring());
 			ps.setInt(8, product.getQuantity());
+			ps.setLong(9, product.getDepartment().getId());
 
 			int numeroRegistrosInsertados = ps.executeUpdate();
 
@@ -124,7 +135,8 @@ public class ProductDAOMySql implements Dao<Product> {
 			ps.setString(6, product.getUnitMeasuring());
 			ps.setBigDecimal(7, product.getUnitPerMeasuring());
 			ps.setInt(8, product.getQuantity());
-			ps.setLong(9, product.getId());
+			ps.setLong(9, product.getDepartment().getId());
+			ps.setLong(10, product.getId());
 
 			int numeroRegistrosModificados = ps.executeUpdate();
 

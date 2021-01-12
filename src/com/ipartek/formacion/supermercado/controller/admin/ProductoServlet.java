@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 
 import com.ipartek.formacion.supermercado.accesodatos.Dao;
 import com.ipartek.formacion.supermercado.controller.Configuracion;
+import com.ipartek.formacion.supermercado.modelo.Department;
 import com.ipartek.formacion.supermercado.modelo.Product;
 
 @WebServlet("/admin/producto")
@@ -30,11 +31,17 @@ public class ProductoServlet extends HttpServlet {
 		String id = request.getParameter("id");
 
 		if (id != null) {
-			Dao<Product> dao = Configuracion.daoProduct;
-			Product prod = dao.get(Long.parseLong(id));
+			Dao<Product> daoProd = Configuracion.daoProduct;
+			Product prod = daoProd.get(Long.parseLong(id));
 
 			request.setAttribute("producto", prod);
 		}
+
+		Dao<Department> daoDept = Configuracion.daoDepartment;
+
+		Iterable<Department> departments = daoDept.getAll();
+
+		request.setAttribute("departamentos", departments);
 
 		request.getRequestDispatcher("/WEB-INF/vistas/admin/producto.jsp").forward(request, response);
 	}
@@ -50,12 +57,14 @@ public class ProductoServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		String nombre = request.getParameter("nombre");
 		String urlImagen = request.getParameter("imagen");
+		String urlImagenAnterior = request.getParameter("imagenAnterior");
 		String descripcion = request.getParameter("descripcion");
 		String precio = request.getParameter("precio");
 		String cantidad = request.getParameter("cantidad");
 		String unidadMedida = request.getParameter("unidad-medida");
 		String precioUnidadMedida = request.getParameter("precio-unidad-medida");
 		String descuento = request.getParameter("descuento");
+		String departamentoId = request.getParameter("departamento");
 
 		// Comprobar que existe el lugar para guardar las imagen
 
@@ -74,20 +83,47 @@ public class ProductoServlet extends HttpServlet {
 			urlImagen = "images/" + nombreFichero;
 		}
 
+		if (urlImagen == null) {
+			urlImagen = urlImagenAnterior;
+		}
+
 		// Crear un producto e introducirlo / actualizarlo
 
 		Product prod = new Product(id, nombre, descripcion, urlImagen, precio, descuento, unidadMedida,
 				precioUnidadMedida, cantidad);
+
+		prod.setDepartment(new Department(Long.parseLong(departamentoId), null, null));
+
 		LOGGER.log(Level.INFO, prod.toString());
 
-		String mensaje = "";
-
 		Dao<Product> dao = Configuracion.daoProduct;
+
+		if (!prod.isCorrecto()) {
+			/*
+			 * if (prod.getId() != null && urlImagen == null) {
+			 * prod.setImageUrl(dao.get(prod.getId()).getImageUrl()); }
+			 */
+
+			request.setAttribute("producto", prod);
+
+			Iterable<Department> departamentos = Configuracion.daoDepartment.getAll();
+
+			request.setAttribute("departamentos", departamentos);
+
+			request.getRequestDispatcher("/WEB-INF/vistas/admin/producto.jsp").forward(request, response);
+			return;
+		}
+
+		String mensaje = "";
 
 		if (prod.getId() == null) {
 			dao.insert(prod);
 			mensaje = "Se ha creado el producto correctamente";
 		} else {
+			/*
+			 * if (urlImagen == null) {
+			 * prod.setImageUrl(dao.get(prod.getId()).getImageUrl()); }
+			 */
 			dao.update(prod);
 			mensaje = "Se ha creado el producto correctamente";
 		}
