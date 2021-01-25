@@ -14,15 +14,36 @@
 	<div class="form-group row">
 		<label for="departamento" class="col-sm-2 col-form-label">Departamento</label>
 		<div class="col-sm-10">
-			<select class="form-control ${ producto.errorDepartment != null ? 'is-invalid' : ''}" id="departamento" name="departamento">
+			<select class="form-control ${ producto.errorDepartment != null ? 'is-invalid' : ''}" id="departamento" name="departamento"
+			onchange="if(this.value == -1) { $('.departamento').fadeIn('slow') } else { $('.departamento').fadeOut('slow') }">
 				<option value="0">Introduzca el departamento</option>
 				<c:forEach items="${ departamentos }" var="departamento">
 					<option value="${ departamento.id }" ${ departamento.id == producto.department.id ? 'selected' : '' }>${ departamento.name }</option>
-				</c:forEach>	
+				</c:forEach>
+				<option disabled="disabled">⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯</option>
+				<option value="-1">Agregar nuevo departamento</option>	
 			</select>
 		</div>
 		<div class="valid-feedback">Departamento Correcto</div>
 		<div class="invalid-feedback">${ producto.errorDepartment }</div>
+	</div>
+	
+	<div class="form-group row departamento" style="display:none">
+		<label for="departamento-nombre" class="col-sm-2 col-form-label">Nombre de Departamento</label>
+		
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="departamento-descripcion" name="departamento-descripcion" 
+				minlength="3" pattern="[A-Z][a-z]*" placeholder="Introduzca el nombre del departamento">
+			<div class="invalid-feedback">Debe introducir un nombre con
+				como mínimo 3 letras, y tan sólo letras y mayúscula la primera.</div>
+		</div>
+	</div>
+	
+	<div class="form-group row departamento" style="display:none">
+		<label for="departamento-descripcion" class="col-sm-2 col-form-label">Descripcion de Departamento</label>
+		<div class="col-sm-10">
+			<textarea class="form-control" id="departamento-nombre" name="departamento-nombre"></textarea>
+		</div>
 	</div>
 	
 	<div class="form-group row">

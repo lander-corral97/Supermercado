@@ -92,7 +92,19 @@ public class ProductoServlet extends HttpServlet {
 		Product prod = new Product(id, nombre, descripcion, urlImagen, precio, descuento, unidadMedida,
 				precioUnidadMedida, cantidad);
 
-		prod.setDepartment(new Department(Long.parseLong(departamentoId), null, null));
+		Long departamentoIdLong = Long.parseLong(departamentoId);
+
+		if (departamentoIdLong == -1) {
+			String nombreDepartamento = request.getParameter("departamento-nombre");
+			String descripcionDepartamento = request.getParameter("departamento-descripcion");
+
+			Department departamento = Configuracion.daoDepartment
+					.insertAndReturn(new Department(null, nombreDepartamento, descripcionDepartamento));
+
+			departamentoIdLong = departamento.getId();
+		}
+
+		prod.setDepartment(new Department(departamentoIdLong, null, null));
 
 		LOGGER.log(Level.INFO, prod.toString());
 

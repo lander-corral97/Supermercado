@@ -25,26 +25,36 @@
 					<th scope="row">${ prod.id }</th>
 					<td>${ prod.name }</td>
 					<td>${ prod.department.name }</td>
-					<td><img src="${ prod.imageUrl }" style="height: 3em"/></td>
+					<td><img src="${ prod.imageUrl }" style="height: 3em" /></td>
 					<td>${ prod.description }</td>
-					<td><fmt:formatNumber type="currency" value="${ prod.price }"/></td>
+					<td><fmt:formatNumber type="currency" value="${ prod.price }" /></td>
 					<td>${ prod.quantity }</td>
 					<td>${ prod.unitMeasuring }</td>
-					<td><fmt:formatNumber type="currency" value="${ prod.unitPerMeasuring }" /></td>
-					<td><fmt:formatNumber type="percent" value="${ prod.discount / 100 }"/></td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a class="btn btn-primary btn-sm" href="admin/producto?id=${ prod.id }">Editar</a>
-                            <a onclick="return confirm('¿Estás seguro?')" class="btn btn-danger btn-sm" href="admin/borrar?id=${ prod.id }">Borrar</a>
-                        </div>
-                    </td>
+					<td><fmt:formatNumber type="currency"
+							value="${ prod.unitPerMeasuring }" /></td>
+					<td><fmt:formatNumber type="percent"
+							value="${ prod.discount / 100 }" /></td>
+					<td>
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<a class="btn btn-primary btn-sm"
+								href="admin/producto?id=${ prod.id }">Editar</a> <a
+								onclick="return confirm('¿Estás seguro?')"
+								class="btn btn-danger btn-sm"
+								href="admin/borrar?id=${ prod.id }">Borrar</a>
+						</div>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<p>
-		<a class="btn btn-primary" href="admin/producto">Añadir Producto</a>
-	</p>
+	<a class="btn btn-primary" href="admin/producto">Añadir Producto</a>
+	<form action="admin/index">
+		<div class="form-check">
+			<input class="form-check-input" id="borrados" type="checkbox"
+				class="form-control" name="borrados" onchange="submit()" ${ borrados != null ? 'checked' : '' }/> <label
+				class="form-check-label" for="borrados">Ver borrados</label>
+		</div>
+	</form>
 </div>
 
 <%@ include file="/WEB-INF/vistas/includes/pie.jsp"%>

@@ -2,6 +2,7 @@ package com.ipartek.formacion.supermercado.accesodatos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,6 +18,7 @@ public class DepartmentDAOMySql implements Dao<Department> {
 	private final String PASS = "";
 
 	private static final String SQL_SELECT = "SELECT * FROM departamento";
+	private static final String SQL_INSERT = "INSERT INTO departamento (nombre,descripcion) VALUES (?,?)";
 
 	static {
 		try {
@@ -48,6 +50,35 @@ public class DepartmentDAOMySql implements Dao<Department> {
 				departments.add(d);
 			}
 			return departments;
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido conectar", e);
+		}
+	}
+
+	@Override
+	public Department insertAndReturn(Department dpto) {
+		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+
+			ps.setString(1, dpto.getName());
+			ps.setString(2, dpto.getDescription());
+
+			int numeroRegistrosInsertados = ps.executeUpdate();
+
+			if (numeroRegistrosInsertados != 1) {
+				throw new AccesoDatosException("Se han insertado " + numeroRegistrosInsertados + " registros");
+			}
+
+			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					dpto.setId(generatedKeys.getLong(1));
+				} else {
+					throw new AccesoDatosException("Error al buscar el ID generado de departamento");
+				}
+			}
+
+			return dpto;
+
 		} catch (SQLException e) {
 			throw new AccesoDatosException("No se ha podido conectar", e);
 		}

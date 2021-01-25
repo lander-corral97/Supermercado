@@ -16,6 +16,10 @@ public interface Dao<T> {
 		throw new AccesoDatosException("MÉTODO NO IMPLEMENTADO");
 	};
 
+	default T insertAndReturn(T object) {
+		throw new AccesoDatosException("MÉTODO NO IMPLEMENTADO");
+	};
+
 	default void update(T object) {
 		throw new AccesoDatosException("MÉTODO NO IMPLEMENTADO");
 	};

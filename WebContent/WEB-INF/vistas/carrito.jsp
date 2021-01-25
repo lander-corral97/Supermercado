@@ -15,7 +15,7 @@
 	<tbody>
 		<c:forEach items="${ carrito }" var="prod">
 			<tr>
-				<th scope="row">${ prod.value.id }</td>
+				<th scope="row">${ prod.value.id }</th>
 				<td>${ prod.value.name }</td>
 				<td>${ prod.value.discountedPrice }</td>
 				<td>${ prod.value.quantity }</td>

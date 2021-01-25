@@ -16,6 +16,8 @@ public class IndexServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String borrados = request.getParameter("borrados");
+		request.setAttribute("borrados", borrados);
 		request.setAttribute("productos", Configuracion.daoProduct.getAll());
 		request.getRequestDispatcher("/WEB-INF/vistas/admin/index.jsp").forward(request, response);
 	}

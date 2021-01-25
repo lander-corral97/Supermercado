@@ -37,22 +37,22 @@
 									value="${ prod.unitPerMeasuring }"></fmt:formatNumber> / ${ prod.unitMeasuring }</small>
 						</p>
 						<p class="card-text">
-						<div class="input-group mx-auto" style="width: 9rem">
-							<div class="input-group-prepend">
-								<button class="btn btn-secondary btn-minus" type="button">
-									<i class="fas fa-minus"></i>
-								</button>
+							<div class="input-group mx-auto" style="width: 9rem">
+								<div class="input-group-prepend">
+									<button class="btn btn-secondary btn-minus" type="button">
+										<i class="fas fa-minus"></i>
+									</button>
+								</div>
+								<input type="number"
+									class="form-control text-center font-weight-bold" placeholder=""
+									aria-label="Cantidad de ${ prod.name } a comprar" value="0" name="${ prod.id }">
+	
+								<div class="input-group-append">
+									<button class="btn btn-secondary btn-plus" type="button">
+										<i class="fas fa-plus"></i>
+									</button>
+								</div>
 							</div>
-							<input type="number"
-								class="form-control text-center font-weight-bold" placeholder=""
-								aria-label="Cantidad de ${ prod.name } a comprar" value="0" name="${ prod.id }">
-
-							<div class="input-group-append">
-								<button class="btn btn-secondary btn-plus" type="button">
-									<i class="fas fa-plus"></i>
-								</button>
-							</div>
-						</div>
 						</p>
 					</div>
 					<a href="#" class="btn btn-primary btn-block">Añadir al carrito</a>
